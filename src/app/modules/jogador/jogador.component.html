@@ -1,0 +1,51 @@
+<form (submit)="salvar(jogador)" novalidate #formCadastro="ngForm">
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" [(ngModel)]="jogador.nome" name="nome" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="idade">Idade</label>
+    <input type="text" [(ngModel)]="jogador.idade" name="idade" class="form-control" />
+  </div>
+
+  <div class="form-group">
+    <label for="nome">Time</label> <br>
+    <select class="selectpicker" name="clube" [(ngModel)]="jogador.clube" *ngIf="clubes">
+      <option *ngFor="let clube of clubes" class="form-control" value="{{clube.codigo}}">{{clube.nome}}</option>
+    </select>
+  </div>
+
+  <div>
+    <button class="btn btn-success" type="submit">
+      <i class="fa fa-save"></i>
+      Salvar
+    </button>
+  </div>  
+  </form>
+
+<br>
+<div class="card" *ngFor="let jogador of jogadores">
+  <div class="card-block">
+    <div class="row">
+      <span class="col">
+        Nome: {{jogador.nome}}
+      </span>
+      <span class="col">
+        Idade: {{jogador.idade}}
+      </span>
+      <span class="col" *ngIf="jogador.objClube">
+        Time: {{jogador.objClube.nome}}
+      </span>
+      <span class="col">
+        <button type="button" class="btn btn-warning pull-right" (click)="selecionaJogador(jogador)">
+          <i class="fa fa-pencil"></i>
+          Alterar
+        </button>
+        <button type="button" class="btn btn-danger pull-right" (click)="deletaJogador(jogador)">
+          <i class="fa fa-trash"></i>
+          Deletar
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
