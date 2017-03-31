@@ -12,7 +12,7 @@ import { Clube } from './clube'
 })
 export class ClubeComponent implements OnInit {
 
-  private clube:Clube = {
+  public clube:Clube = {
     nome: "",
     presidente: ""
   }
