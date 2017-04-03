@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(public loginService: LoginService) { }
 
   ngOnInit() {
-    
+    this.user.login = 'cbf';
+    this.user.password = 'cbf';
   }
 
   doLogin(login:any, password:any){
