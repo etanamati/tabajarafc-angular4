@@ -1,22 +1,40 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JogadorComponent } from './jogador.component'
+import { JogadorModule } from "app/modules/jogador/jogador.module";
+import { HttpModule, Http } from '@angular/http';
+import { AppRoutingModule } from "app/app.routing";
+import { JogadorService } from "app/modules/jogador/jogador.service";
+import { APP_BASE_HREF } from "@angular/common";
+import { Observable } from 'rxjs/Rx';
+import { ClubeService } from "app/modules/clube/clube.service";
+
 describe('JogadorComponent', () => {
   let component: JogadorComponent;
   let fixture: ComponentFixture<JogadorComponent>;
+  let jogadorService: any;
+  let clubeService: any;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ JogadorComponent ]
-    })
-    .compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(JogadorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    clubeService = jasmine.createSpyObj('clubeService', ['getClubes']);
+    clubeService.getClubes.and.callFake(() => Observable.of([{ nome: 'São Paulo',presidente: 'Leco' }, { nome: 'Flamengo',presidente: 'Zico' }]));
+
+    TestBed.configureTestingModule({
+      imports: [JogadorModule, HttpModule, AppRoutingModule],
+      providers: [ 
+        { provide: APP_BASE_HREF, useValue: '/' },
+        { provide: JogadorService, useValue: jogadorService },
+        { provide: ClubeService, useValue: clubeService }
+      ]
+    });
+
+    TestBed.compileComponents().then(()=> {
+      fixture = TestBed.createComponent(JogadorComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
