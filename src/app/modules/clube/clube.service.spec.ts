@@ -4,7 +4,7 @@ import { ClubeService } from './clube.service';
 import { Observable } from "rxjs/Rx";
 import { Clube } from "app/modules/clube/clube";
 
-fdescribe('ClubeService', () => {
+describe('ClubeService', () => {
   let http: any;
   let clubeService: ClubeService;
 
@@ -13,11 +13,11 @@ fdescribe('ClubeService', () => {
     clubeService = new ClubeService(http);
   });
 
-  fit('should be defined', () => {
+  it('should be defined', () => {
     expect(clubeService).toBeDefined();
   });
 
-  fit('get should have been called', () => {
+  it('get should have been called', () => {
     http.get.and.callFake(() => Observable.of(
       [{
         codigo: '1',
@@ -29,9 +29,10 @@ fdescribe('ClubeService', () => {
     expect(http.get).toHaveBeenCalledTimes(1);
   });
 
-  fit('post should have been called', () => {
+  it('post should have been called', () => {
     http.post.and.callFake(() => Observable.of({}));
     const clube: Clube = {
+        codigo: null,
         nome: 'São Paulo',
         presidente: 'Leco'
       };
@@ -39,7 +40,7 @@ fdescribe('ClubeService', () => {
     expect(http.post).toHaveBeenCalledTimes(1);
   });
 
-  fit('patch should have been called', () => {
+  it('patch should have been called', () => {
     http.patch.and.callFake(() => Observable.of({}));
     const clube: Clube = {
         nome: 'São Paulo',
@@ -49,7 +50,7 @@ fdescribe('ClubeService', () => {
     expect(http.patch).toHaveBeenCalledTimes(1);
   });
   
-  fit('delete should have been called', () => {
+  it('delete should have been called', () => {
     http.delete.and.callFake(() => Observable.of({}));
     const clube: Clube = {
         nome: 'São Paulo',

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, HttpModule, JsonpModule } from "@angular/http"
+import { Http, Response } from "@angular/http"
 import {Observable} from 'rxjs/Rx';
-import 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { Clube } from "app/modules/clube/clube";
 
 @Injectable()
 export class ClubeService {
@@ -11,29 +10,30 @@ export class ClubeService {
 
   constructor(private http: Http) { }
 
-  getClubes() {
+  getClubes(): Observable<Clube[]> {
     return this.http.get(`${this.baseUrl}/clube.json`)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+       .map((res: Response) => this.convert(res.json()))
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  postClube(clube:any) {
+  postClube(clube: Clube): Observable<Clube> {
     return this.http.post(`${this.baseUrl}/clube.json`, clube)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  pathClube(clube:any) {
+  pathClube(clube:any): Observable<Clube> {
     let codigo = clube.codigo;
     delete clube.codigo;
     return this.http.patch(`${this.baseUrl}/clube/${codigo}.json`, clube)
-      .toPromise();
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  deleteClube(codigoClube:any) {
-    console.log("Service " + codigoClube)
+  deleteClube(codigoClube:any): Observable<Clube> {
     return this.http.delete(`${this.baseUrl}/clube/${codigoClube}.json`)
-      .toPromise();
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   private convert(parsedResponse:any) {

@@ -7,12 +7,12 @@ import { Clube } from './clube'
 @Component({
   selector: 'app-clube',
   templateUrl: './clube.component.html',
-  styleUrls: ['./clube.component.css'],
-  providers: [ClubeService]
+  styleUrls: ['./clube.component.css']
 })
 export class ClubeComponent implements OnInit {
 
   public clube:Clube = {
+    codigo: "",
     nome: "",
     presidente: ""
   }
@@ -21,7 +21,7 @@ export class ClubeComponent implements OnInit {
 
   private clubes: Array<Clube>;
 
-  constructor(private service: ClubeService) {
+  constructor(private clubeService: ClubeService) {
 
   }
 
@@ -30,43 +30,44 @@ export class ClubeComponent implements OnInit {
   }
 
   private reload() {
-    return this.service.getClubes()
-      .then(clubes => this.clubes = clubes);
+    return this.clubeService.getClubes()
+      .subscribe(clubes => this.clubes = clubes);
   }
 
   limpa() {
     this.clube = {
+      codigo:"",
       nome: "",
       presidente: ""
     }
   }
 
-  salvar(clube:any) {
+  salvar(clube:Clube) {
     if (clube.codigo) {
-      this.service.pathClube(clube)
-        .then(result => {
-          this.reload()
+      this.clubeService.pathClube(clube)
+        .subscribe(result => {
+          this.reload();
           this.mensagem = "Alterou!!!!";
           this.limpa();
-        }).catch(error => {
+        }, error => {
           this.mensagem = "Problema ao alterar: " + error
         })
     }
     else {
-      this.service.postClube(clube)
-        .then(result => {
+      this.clubeService.postClube(clube)
+        .subscribe(result => {
           this.reload()
           this.mensagem = "Salvou!!!!";
           this.limpa();
-        }).catch(error => {
+        }, error => {
           this.mensagem = "Problema ao salvar: " + error
         })
     }
   }
 
-  deletaClube(clube:any) {
-    this.service.deleteClube(clube.codigo)
-      .then(() => {
+  deletaClube(clube:Clube) {
+    this.clubeService.deleteClube(clube.codigo)
+      .subscribe(() => {
         this.reload()
         this.mensagem = "Deletado com Sucesso!!!"
       })

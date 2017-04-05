@@ -9,6 +9,7 @@ import { Clube } from "../modules/clube/clube";
 })
 export class HomeComponent implements OnInit{
   private clube:Clube = {
+    codigo:"",
     nome:"",
     presidente:""
   }
@@ -25,6 +26,6 @@ export class HomeComponent implements OnInit{
 
   private reload() {
     return this.clubeService.getClubes()
-      .then(clubes => this.clubes = clubes);
+      .subscribe(clubes => this.clubes = clubes);
   }
 }

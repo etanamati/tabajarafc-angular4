@@ -9,12 +9,12 @@ import { Jogador } from './jogador'
 @Component({
   selector: 'app-jogador',
   templateUrl: './jogador.component.html',
-  styleUrls: ['./jogador.component.css'],
-  providers: [JogadorService]
+  styleUrls: ['./jogador.component.css']
 })
 export class JogadorComponent implements OnInit {
 
   private clube:Clube = {
+    codigo:"",
     nome:"",
     presidente:""
   }
@@ -44,16 +44,16 @@ export class JogadorComponent implements OnInit {
 
   private reloadJogador() {
     return this.service.getJogadores()
-      .then(jogadores => this.jogadores = jogadores);
+      .subscribe(jogadores => this.jogadores = jogadores);
   }
 
 
   private reloadJogadorComClube() {
     return this.service.getJogadores()
-      .then(jogadores => {
+      .subscribe(jogadores => {
         this.jogadores = jogadores
         this.clubeService.getClubes()
-          .then(clubes => {
+          .subscribe(clubes => {
             this.clubes = clubes; 
             for (let i = 0; i < this.jogadores.length; i++) {
               for (let j = 0; j < this.clubes.length; j++) {
@@ -62,14 +62,13 @@ export class JogadorComponent implements OnInit {
                 }
               }
             }
-            console.log(this.jogadores)
           });
         });
   }
 
   private reloadClube(){
     return this.clubeService.getClubes()
-      .then(clubes => {this.clubes = clubes; console.log(this.clubes)});
+      .subscribe(clubes => {this.clubes = clubes});
   }
 
   limpa() {
@@ -83,21 +82,21 @@ export class JogadorComponent implements OnInit {
   salvar(jogador:any) {
     if (jogador.codigo) {
       this.service.pathJogador(jogador)
-        .then(result => {
+        .subscribe(result => {
           this.reloadJogadorComClube()
           this.mensagem = "Alterou!!!!";
           this.limpa();
-        }).catch(error => {
+        }, error => {
           this.mensagem = "Problema ao alterar: " + error
         })
     }
     else {
       this.service.postJogador(jogador)
-        .then(result => {
+        .subscribe(result => {
           this.reloadJogadorComClube()
           this.mensagem = "Salvou!!!!";
           this.limpa();
-        }).catch(error => {
+        }, error => {
           this.mensagem = "Problema ao salvar: " + error
         })
     }
@@ -105,7 +104,7 @@ export class JogadorComponent implements OnInit {
 
   deletaJogador(jogador:any) {
     this.service.deleteJogador(jogador.codigo)
-      .then(() => {
+      .subscribe(() => {
         this.reloadJogadorComClube()
         this.mensagem = "Deletado com Sucesso!!!"
       })

@@ -18,7 +18,10 @@ describe('JogadorComponent', () => {
   beforeEach(async(() => {
 
     clubeService = jasmine.createSpyObj('clubeService', ['getClubes']);
-    clubeService.getClubes.and.callFake(() => Observable.of([{ nome: 'São Paulo',presidente: 'Leco' }, { nome: 'Flamengo',presidente: 'Zico' }]));
+    clubeService.getClubes.and.callFake(() => Observable.of([{ nome: 'São Paulo',presidente: 'Leco' }, {codigo: '1', nome: 'Flamengo',presidente: 'Zico' }]));
+
+    jogadorService = jasmine.createSpyObj('jogadorService', ['getJogadores']);
+    jogadorService.getJogadores.and.callFake(() => Observable.of([{nome: 'Rogerio Ceni', idade: '44'}]));
 
     TestBed.configureTestingModule({
       imports: [JogadorModule, HttpModule, AppRoutingModule],

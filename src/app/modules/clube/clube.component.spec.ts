@@ -11,7 +11,7 @@ import { clubes } from './clubes.stub'
 import { By } from '@angular/platform-browser';
 import { Observable } from "rxjs/Rx";
 
-fdescribe('ClubeComponent', () => {
+describe('ClubeComponent', () => {
   let component: ClubeComponent;
   let fixture: ComponentFixture<ClubeComponent>;
   let clubeService: any;
@@ -19,7 +19,7 @@ fdescribe('ClubeComponent', () => {
   beforeEach(async(() => {
 
     clubeService = jasmine.createSpyObj('clubeService', ['postClube','getClubes']) 
-    clubeService.getClubes.and.callFake(() => Observable.of([clubes]));
+    clubeService.getClubes.and.callFake(() => Observable.of([{codigo: '1', nome: 'São Paulo', presidente: 'Leco'}]));
     clubeService.postClube.and.callFake(() => Observable.of({}));
 
     TestBed.configureTestingModule({
@@ -46,8 +46,6 @@ fdescribe('ClubeComponent', () => {
    
     component.clube = clube;
 
-    fixture.detectChanges();
-
     const nome: string = component.clube.nome;
     const presidente: string = component.clube.presidente;
     
@@ -55,25 +53,21 @@ fdescribe('ClubeComponent', () => {
     expect(presidente).toEqual('Leco', 'should be equals "Leco"');
   });
   
-  /**
-   * 
-   it('should save a new clube', (done) => {
-    const clube: Clube = { nome: 'São Paulo', presidente: 'Leco' };
+  it('should save a new clube', (done) => {
+    const clube: Clube = {codigo: null, nome: 'São Paulo2', presidente: 'Leco' };
     component.clube = clube;
 
+    const salvar: HTMLButtonElement = fixture.debugElement.query(By.css('#btnSalvar')).nativeElement;
+    expect(salvar).toBeDefined();
+    expect(salvar.disabled).toBeFalsy();
+    
+    salvar.click();
+
     fixture.detectChanges();
-
     fixture.whenStable().then(() => {
-      const salvar: HTMLButtonElement = fixture.debugElement.query(By.css('#btnSave')).nativeElement;
-      expect(salvar).toBeDefined();
-      expect(salvar.disabled).toBeFalsy();
-
-      salvar.click();
-
       expect(clubeService.postClube).toHaveBeenCalledTimes(1);
-      expect(clubeService.getclubes).toHaveBeenCalledTimes(2);
+      expect(clubeService.getClubes).toHaveBeenCalledTimes(2);
       done();
     });
   });
-  */
 });

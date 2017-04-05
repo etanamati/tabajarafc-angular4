@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http,HttpModule,JsonpModule} from "@angular/http"
+import {Http, Response} from "@angular/http"
+import { Observable } from 'rxjs/Rx';
+import { Jogador } from "app/modules/jogador/jogador";
 
 @Injectable()
 export class JogadorService {
@@ -8,35 +10,36 @@ export class JogadorService {
 
   constructor(private http:Http) { }
 
-  getJogadores() {
+  getJogadores(): Observable<Jogador[]> {
     return this.http.get(`${this.baseUrl}/jogador.json`)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => this.convert(res.json()))
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  getJogadoresPorClube(){
+  getJogadoresPorClube(): Observable<Jogador>{
     return this.http.get(`${this.baseUrl}/jogador.json`)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => this.convert(res.json()))
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  postJogador(jogador:any) {
+  postJogador(jogador:any): Observable<Jogador> {
     return this.http.post(`${this.baseUrl}/jogador.json`, jogador)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  pathJogador(jogador:any) {
+  pathJogador(jogador:any): Observable<Jogador> {
     let codigo = jogador.codigo;
     delete jogador.codigo;
     return this.http.patch(`${this.baseUrl}/jogador/${codigo}.json`, jogador)
-      .toPromise();
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  deleteJogador(codJogador:any) {
-    console.log("Service " + codJogador)
+  deleteJogador(codJogador:any): Observable<Jogador> {
     return this.http.delete(`${this.baseUrl}/jogador/${codJogador}.json`)
-      .toPromise();
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
 
